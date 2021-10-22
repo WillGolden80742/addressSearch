@@ -7,8 +7,6 @@ package search;
 
 import java.awt.Color;
 import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
