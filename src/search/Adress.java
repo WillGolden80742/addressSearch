@@ -5,15 +5,34 @@
  */
 package search;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.Files;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -25,17 +44,25 @@ import org.w3c.dom.Document;
 public class Adress extends javax.swing.JFrame {
 
     private String endereco = "Av.+Paulista,+São+Paulo+-+SP";
-    private static String apiKey; 
-    
-    public Adress () {
+    private static String apiKey;
+    private String mapHtml = "<center ><img style=\"padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
+
+    public Adress() {
         initComponents();
-        setIconTop ();
+        setIconTop();
         setKeyAPI();
-        this.getContentPane().setBackground(Color.DARK_GRAY);    
-        setLocation(400,200);
+        this.getContentPane().setBackground(Color.DARK_GRAY);
+        setLocation(400, 200);
+        setDefaulMap();
     }
-    
-    private void setKeyAPI () {
+
+    private void setDefaulMap() {
+        String path = new File("src/Images/cityBackground.png").getAbsoluteFile().toURI().toString();
+        this.mapHtml = mapHtml.replace("#img", path);
+        mapView.setText(mapHtml);
+    }
+
+    private void setKeyAPI() {
         File myObj = new File("apiKey.txt");
         Scanner myReader;
         String apiKey = "";
@@ -49,10 +76,10 @@ public class Adress extends javax.swing.JFrame {
         }
         this.apiKey = apiKey;
     }
-    
-    private void setIconTop () {
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/city.png")));
-    }    
+
+    private void setIconTop() {
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/city.png")));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,13 +95,13 @@ public class Adress extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         logradouro = new javax.swing.JTextField();
         search = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
         referencia = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         complemento = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         search1 = new javax.swing.JButton();
+        mapView = new javax.swing.JEditorPane();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -101,9 +128,7 @@ public class Adress extends javax.swing.JFrame {
             }
         });
 
-        logradouro.setBackground(new java.awt.Color(51, 51, 51));
         logradouro.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        logradouro.setForeground(new java.awt.Color(255, 255, 255));
         logradouro.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         logradouro.setToolTipText("Endereço");
         logradouro.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
@@ -114,9 +139,7 @@ public class Adress extends javax.swing.JFrame {
             }
         });
 
-        search.setBackground(new java.awt.Color(51, 51, 51));
-        search.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        search.setForeground(new java.awt.Color(255, 255, 255));
+        search.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         search.setText("PESQUISAR");
         search.setToolTipText("Pesquisar");
         search.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
@@ -127,42 +150,29 @@ public class Adress extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cityBackground.png"))); // NOI18N
-
-        referencia.setBackground(new java.awt.Color(51, 51, 51));
-        referencia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        referencia.setForeground(new java.awt.Color(255, 255, 255));
+        referencia.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         referencia.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         referencia.setToolTipText("Referência");
         referencia.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
         referencia.setCaretColor(new java.awt.Color(0, 0, 0));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Endereço :");
 
-        complemento.setBackground(new java.awt.Color(51, 51, 51));
         complemento.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        complemento.setForeground(new java.awt.Color(255, 255, 255));
         complemento.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         complemento.setToolTipText("Complemento");
         complemento.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
         complemento.setCaretColor(new java.awt.Color(0, 0, 0));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Compl : ");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Ref : ");
 
-        search1.setBackground(new java.awt.Color(51, 51, 51));
-        search1.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        search1.setForeground(new java.awt.Color(255, 255, 255));
+        search1.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         search1.setText("SALVAR");
         search1.setToolTipText("Salvar");
         search1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
@@ -173,11 +183,14 @@ public class Adress extends javax.swing.JFrame {
             }
         });
 
+        mapView.setEditable(false);
+        mapView.setContentType("text/html"); // NOI18N
+        mapView.setAutoscrolls(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -197,12 +210,15 @@ public class Adress extends javax.swing.JFrame {
                             .addComponent(search, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(complemento))))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(mapView, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addComponent(mapView, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logradouro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -227,7 +243,7 @@ public class Adress extends javax.swing.JFrame {
     }//GEN-LAST:event_searchActionPerformed
 
     private void logradouroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_logradouroKeyReleased
-        if(evt.getKeyCode()==10){
+        if (evt.getKeyCode() == 10) {
             search();
         }
     }//GEN-LAST:event_logradouroKeyReleased
@@ -240,32 +256,46 @@ public class Adress extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formWindowGainedFocus
 
-    
-    private String endercoTratado () {
+    private String endercoTratado() {
         String[] endereçoArray = logradouro.getText().split(" ");
         String endereco = "";
-        for (String l:endereçoArray){
-            endereco+=l+"%20";
-        }  
+        for (String l : endereçoArray) {
+            endereco += l + "%20";
+        }
         return endereco;
     }
-    
-    private void  search () {    
-        logradouro.setText(calculateRoute(endereco,endercoTratado())[0]);
+
+    private void search() {
+        logradouro.setText(calculateRoute(endereco, endercoTratado())[0]);
+        try {
+            downloadMap();
+        } catch (IOException ex) {
+            Logger.getLogger(Adress.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    private static String[] calculateRoute(String start, String finish){
+
+    private void downloadMap() throws IOException {
+        mapHtml = "<center ><img style=\"padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
+        String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + endercoTratado() + "&zoom=13&size=512x178&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=" + apiKey;
+        mapHtml = mapHtml.replace("#img", url);
+        System.out.println(mapHtml);
+        mapView.setText(mapHtml);
+
+        // faz o preload da imagem
+    }
+
+    private static String[] calculateRoute(String start, String finish) {
         String result = "";
-        String urlString = "https://maps.googleapis.com/maps/api/distancematrix/xml?origins="+start+"&destinations="+finish+"&key="+apiKey+"&mode=driving&language=pt-BR&sensor=false";
+        String urlString = "https://maps.googleapis.com/maps/api/distancematrix/xml?origins=" + start + "&destinations=" + finish + "&key=" + apiKey + "&mode=driving&language=pt-BR&sensor=false";
         System.out.println(urlString);
-        try{
-            
+        try {
+
             URL urlGoogleDirService = new URL(urlString);
-            HttpURLConnection urlGoogleDirCon = (HttpURLConnection)urlGoogleDirService.openConnection();
-            urlGoogleDirCon.setAllowUserInteraction( false );
-            urlGoogleDirCon.setDoInput( true );
-            urlGoogleDirCon.setDoOutput( false );
-            urlGoogleDirCon.setUseCaches( true );
+            HttpURLConnection urlGoogleDirCon = (HttpURLConnection) urlGoogleDirService.openConnection();
+            urlGoogleDirCon.setAllowUserInteraction(false);
+            urlGoogleDirCon.setDoInput(true);
+            urlGoogleDirCon.setDoOutput(false);
+            urlGoogleDirCon.setUseCaches(true);
             urlGoogleDirCon.setRequestMethod("GET");
             urlGoogleDirCon.connect();
 
@@ -277,27 +307,29 @@ public class Adress extends javax.swing.JFrame {
             String[] value = resultado.split("\n");
             String[] values = new String[2];
             int i = 0;
-            for(String s :value) {
-                System.out.println("Valores"+s);
+            for (String s : value) {
+                System.out.println("Valores" + s);
                 if (i == 3) {
-                   values[0] = s;
+                    values[0] = s;
                 }
                 if (s.contains("km")) {
                     values[1] = s;
                 }
-                i++;    
+                i++;
             }
-            return values; 
-        }
-
-        catch(Exception e)
-        {
+            return values;
+        } catch (Exception e) {
             System.out.println(e);
             return null;
         }
-     }    
-    
+    }
+
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(new FlatDarkLaf());
+        } catch (UnsupportedLookAndFeelException ex) {
+            System.err.println("Failed to initialize LaF");
+        }
         new Adress().setVisible(true);
     }
     /**
@@ -310,10 +342,10 @@ public class Adress extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField logradouro;
+    private javax.swing.JEditorPane mapView;
     private javax.swing.JTextField referencia;
     private javax.swing.JButton search;
     private javax.swing.JButton search1;
