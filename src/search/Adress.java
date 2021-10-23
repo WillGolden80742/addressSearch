@@ -28,7 +28,9 @@ import org.w3c.dom.Document;
  */
 public class Adress extends javax.swing.JFrame {
 
-    private String endereco = "Av.+Paulista,+São+Paulo+-+SP";
+    private String enderecoInicial = "Av.+Paulista,+São+Paulo+-+SP";
+    private String enderecoFinal;
+    private String[] values;
     private static String apiKey;
     private String mapHtml = "<center ><img style=\"margin:0;padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
 
@@ -42,7 +44,7 @@ public class Adress extends javax.swing.JFrame {
     }
 
     private void setDefaulMap() {
-        String path = new File("src/images/cityBackground.png").getAbsoluteFile().toURI().toString();
+        String path = new File("src/Images/cityBackground.png").getAbsoluteFile().toURI().toString();
         this.mapHtml = mapHtml.replace("#img", path);
         mapView.setText(mapHtml);
 
@@ -64,7 +66,7 @@ public class Adress extends javax.swing.JFrame {
     }
 
     private void setIconTop() {
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/city.png")));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/city.png")));
     }
 
     /**
@@ -252,63 +254,65 @@ public class Adress extends javax.swing.JFrame {
     }
 
     private void search() {
-        logradouro.setText(calculateRoute(endereco, endercoTratado())[0]);
-        try {
-            downloadMap();
-        } catch (IOException ex) {
-            Logger.getLogger(Adress.class.getName()).log(Level.SEVERE, null, ex);
+        enderecoFinal = endercoTratado();
+        new Thread(endereco).start();
+        new Thread(downloadMap).start();
+    }
+
+    private final Runnable downloadMap = new Runnable() {
+        @Override
+        public void run() {
+
+            mapHtml = "<center ><img style=\"padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
+            String url = "https://maps.googleapis.com/maps/api/staticmap?size=512x256&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + endercoTratado() + "&zoom=18&size=512x256&maptype=roadmap&key=" + apiKey;
+            mapHtml = mapHtml.replace("#img", url);
+            System.out.println(mapHtml);
+            mapView.setText(mapHtml);
+
+            // faz o preload da imagem
         }
-    }
+    };
 
-    private void downloadMap() throws IOException {
-        mapHtml = "<center ><img style=\"padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
-        String url = "https://maps.googleapis.com/maps/api/staticmap?center=" + endercoTratado() + "&zoom=18&size=512x256&maptype=roadmap&markers=color:blue%7C&markers=color:green%7C&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=" + apiKey;
-        mapHtml = mapHtml.replace("#img", url);
-        System.out.println(mapHtml);
-        mapView.setText(mapHtml);
+    private final Runnable endereco = new Runnable() {
+        @Override
+        public void run() {
+            String urlString = "https://maps.googleapis.com/maps/api/distancematrix/xml?origins=" + enderecoInicial + "&destinations=" + enderecoFinal + "&key=" + apiKey + "&mode=driving&language=pt-BR&sensor=false";
+            System.out.println(urlString);
+            try {
 
-        // faz o preload da imagem
-    }
+                URL urlGoogleDirService = new URL(urlString);
+                HttpURLConnection urlGoogleDirCon = (HttpURLConnection) urlGoogleDirService.openConnection();
+                urlGoogleDirCon.setAllowUserInteraction(false);
+                urlGoogleDirCon.setDoInput(true);
+                urlGoogleDirCon.setDoOutput(false);
+                urlGoogleDirCon.setUseCaches(true);
+                urlGoogleDirCon.setRequestMethod("GET");
+                urlGoogleDirCon.connect();
 
-    private static String[] calculateRoute(String start, String finish) {
-        String result = "";
-        String urlString = "https://maps.googleapis.com/maps/api/distancematrix/xml?origins=" + start + "&destinations=" + finish + "&key=" + apiKey + "&mode=driving&language=pt-BR&sensor=false";
-        System.out.println(urlString);
-        try {
-
-            URL urlGoogleDirService = new URL(urlString);
-            HttpURLConnection urlGoogleDirCon = (HttpURLConnection) urlGoogleDirService.openConnection();
-            urlGoogleDirCon.setAllowUserInteraction(false);
-            urlGoogleDirCon.setDoInput(true);
-            urlGoogleDirCon.setDoOutput(false);
-            urlGoogleDirCon.setUseCaches(true);
-            urlGoogleDirCon.setRequestMethod("GET");
-            urlGoogleDirCon.connect();
-
-            DocumentBuilderFactory factoryDir = DocumentBuilderFactory.newInstance();
-            DocumentBuilder parserDirInfo = factoryDir.newDocumentBuilder();
-            Document docDir = parserDirInfo.parse(urlGoogleDirCon.getInputStream());
-            urlGoogleDirCon.disconnect();
-            String resultado = docDir.getDocumentElement().getTextContent();
-            String[] value = resultado.split("\n");
-            String[] values = new String[2];
-            int i = 0;
-            for (String s : value) {
-                System.out.println("Valores" + s);
-                if (i == 3) {
-                    values[0] = s;
+                DocumentBuilderFactory factoryDir = DocumentBuilderFactory.newInstance();
+                DocumentBuilder parserDirInfo = factoryDir.newDocumentBuilder();
+                Document docDir = parserDirInfo.parse(urlGoogleDirCon.getInputStream());
+                urlGoogleDirCon.disconnect();
+                String resultado = docDir.getDocumentElement().getTextContent();
+                String[] value = resultado.split("\n");
+                values = new String[2];
+                int i = 0;
+                for (String s : value) {
+                    System.out.println("Valores" + s);
+                    if (i == 3) {
+                        values[0] = s;
+                    }
+                    if (s.contains("km")) {
+                        values[1] = s;
+                    }
+                    i++;
                 }
-                if (s.contains("km")) {
-                    values[1] = s;
-                }
-                i++;
+                logradouro.setText(values[0]);
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            return values;
-        } catch (Exception e) {
-            System.out.println(e);
-            return null;
         }
-    }
+    };
 
     public static void main(String[] args) {
         try {
@@ -318,9 +322,6 @@ public class Adress extends javax.swing.JFrame {
         }
         new Adress().setVisible(true);
     }
-    /**
-     * @param args the command line arguments
-     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField complemento;
