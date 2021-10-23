@@ -5,6 +5,7 @@
  */
 package search;
 
+
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -31,7 +32,7 @@ public class Adress extends javax.swing.JFrame {
     private String enderecoFinal;
     private String[] values;
     private static String apiKey;
-    private String mapHtml = "<center ><img style=\"margin:0;padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
+    private String mapHtml = "<html style=\"height: 100%;\"><head><meta name=\"viewport\" content=\"width=device-width, minimum-scale=0.1\"><title>staticmap (600×300)</title></head><body style=\"margin: 0px; height: 100%\"><img style=\"-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></body></html>";
     private boolean selectSizeInit = false;
 
     public Adress() {
@@ -146,6 +147,7 @@ public class Adress extends javax.swing.JFrame {
         referencia.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
         referencia.setCaretColor(new java.awt.Color(0, 0, 0));
 
+        jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Endereço :");
 
@@ -155,14 +157,16 @@ public class Adress extends javax.swing.JFrame {
         complemento.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
         complemento.setCaretColor(new java.awt.Color(0, 0, 0));
 
+        jLabel4.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Compl : ");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Liberation Sans", 1, 14)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Ref : ");
 
         search1.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        search1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/save.png"))); // NOI18N
         search1.setText("SALVAR");
         search1.setToolTipText("Salvar");
         search1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
@@ -175,6 +179,7 @@ public class Adress extends javax.swing.JFrame {
 
         mapView.setEditable(false);
         mapView.setContentType("text/html"); // NOI18N
+        mapView.setText("<html>   <head>    </head>   <body styles=\"background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80'); background-size: 100%;\">     <p style=\"margin-top: 0\">            </p>   </body> </html> ");
 
         size.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1x", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x", "17x", "18x", "19x", "20x", "21x", "22x", "23x", "24x", "25x", "26x", "27x", "28x", "29x", "30x" }));
         size.setEnabled(false);
@@ -192,10 +197,11 @@ public class Adress extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -287,7 +293,7 @@ public class Adress extends javax.swing.JFrame {
         @Override
         public void run() {
             String x = ((String) size.getSelectedItem()).toLowerCase().replace("x", "");
-            mapHtml = "<center ><img style=\"padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
+            mapHtml = "<html style=\"height: 100%;\"><head><meta name=\"viewport\" content=\"width=device-width, minimum-scale=0.1\"><title>staticmap (600×300)</title></head><body style=\"margin: 0px; background:white; height: 100%\"><img style=\"-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></body></html>";
             String url = "https://maps.googleapis.com/maps/api/staticmap?size=512x256&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + endercoTratado() + "&zoom=" + x + "&size=512x256&maptype=roadmap&key=" + apiKey;
             mapHtml = mapHtml.replace("#img", url);
             System.out.println(mapHtml);
@@ -338,6 +344,7 @@ public class Adress extends javax.swing.JFrame {
         }
     };
 
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
@@ -346,7 +353,7 @@ public class Adress extends javax.swing.JFrame {
         }
         new Adress().setVisible(true);
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField complemento;
     private javax.swing.JButton jButton1;

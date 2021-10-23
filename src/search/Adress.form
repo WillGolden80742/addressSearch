@@ -59,10 +59,12 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jLabel2" min="-2" pref="71" max="-2" attributes="0"/>
-                          <Component id="jLabel5" min="-2" pref="71" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                              <Component id="jLabel5" min="-2" pref="71" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jLabel2" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -184,6 +186,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Liberation Sans" size="14" style="1"/>
+        </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
         <Property name="text" type="java.lang.String" value="Endere&#xe7;o :"/>
       </Properties>
@@ -209,6 +214,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Liberation Sans" size="14" style="1"/>
+        </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
         <Property name="text" type="java.lang.String" value="Compl : "/>
       </Properties>
@@ -216,7 +224,7 @@
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="14" style="3"/>
+          <Font name="Liberation Sans" size="14" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
         <Property name="text" type="java.lang.String" value="Ref : "/>
@@ -226,6 +234,9 @@
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Liberation Sans" size="15" style="1"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/Images/save.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="SALVAR"/>
         <Property name="toolTipText" type="java.lang.String" value="Salvar"/>
@@ -246,6 +257,7 @@
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="contentType" type="java.lang.String" value="text/html" noResource="true"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;   &lt;head&gt;    &lt;/head&gt;   &lt;body styles=&quot;background-image: url(&apos;https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&amp;w=1000&amp;q=80&apos;); background-size: 100%;&quot;&gt;     &lt;p style=&quot;margin-top: 0&quot;&gt;            &lt;/p&gt;   &lt;/body&gt; &lt;/html&gt; "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="size">
