@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -33,6 +32,7 @@ public class Adress extends javax.swing.JFrame {
     private String[] values;
     private static String apiKey;
     private String mapHtml = "<center ><img style=\"margin:0;padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
+    private boolean selectSizeInit = false;
 
     public Adress() {
         initComponents();
@@ -41,6 +41,7 @@ public class Adress extends javax.swing.JFrame {
         this.getContentPane().setBackground(Color.DARK_GRAY);
         setLocation(400, 200);
         setDefaulMap();
+        size.setSelectedIndex(16);
     }
 
     private void setDefaulMap() {
@@ -90,6 +91,7 @@ public class Adress extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         search1 = new javax.swing.JButton();
         mapView = new javax.swing.JEditorPane();
+        size = new javax.swing.JComboBox<>();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -174,32 +176,45 @@ public class Adress extends javax.swing.JFrame {
         mapView.setEditable(false);
         mapView.setContentType("text/html"); // NOI18N
 
+        size.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1x", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x", "11x", "12x", "13x", "14x", "15x", "16x", "17x", "18x", "19x", "20x", "21x", "22x", "23x", "24x", "25x", "26x", "27x", "28x", "29x", "30x" }));
+        size.setEnabled(false);
+        size.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sizeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(referencia, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(search1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(search1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(referencia, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(complemento, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(logradouro, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(search, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(complemento)))
-                            .addComponent(logradouro)))
-                    .addComponent(mapView, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10))
+                                .addComponent(size, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(12, 12, 12))
+                    .addComponent(mapView, javax.swing.GroupLayout.Alignment.LEADING))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,12 +223,13 @@ public class Adress extends javax.swing.JFrame {
                 .addComponent(mapView, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(logradouro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(logradouro, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(size, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(complemento, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                     .addComponent(referencia, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -244,6 +260,14 @@ public class Adress extends javax.swing.JFrame {
 
     }//GEN-LAST:event_formWindowGainedFocus
 
+    private void sizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sizeActionPerformed
+        if (selectSizeInit) {
+            new Thread(downloadMap).start();
+        } else {
+            selectSizeInit=true;
+        }
+    }//GEN-LAST:event_sizeActionPerformed
+
     private String endercoTratado() {
         String[] endereçoArray = logradouro.getText().split(" ");
         String endereco = "";
@@ -262,13 +286,13 @@ public class Adress extends javax.swing.JFrame {
     private final Runnable downloadMap = new Runnable() {
         @Override
         public void run() {
-
+            String x = ((String) size.getSelectedItem()).toLowerCase().replace("x", "");
             mapHtml = "<center ><img style=\"padding:0;-webkit-user-select: none;margin:none;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;\" src=\"#img\"></center>";
-            String url = "https://maps.googleapis.com/maps/api/staticmap?size=512x256&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + endercoTratado() + "&zoom=18&size=512x256&maptype=roadmap&key=" + apiKey;
+            String url = "https://maps.googleapis.com/maps/api/staticmap?size=512x256&maptype=roadmap&markers=size:mid%7Ccolor:red%7C" + endercoTratado() + "&zoom=" + x + "&size=512x256&maptype=roadmap&key=" + apiKey;
             mapHtml = mapHtml.replace("#img", url);
             System.out.println(mapHtml);
             mapView.setText(mapHtml);
-
+            size.setEnabled(true);
             // faz o preload da imagem
         }
     };
@@ -336,5 +360,6 @@ public class Adress extends javax.swing.JFrame {
     private javax.swing.JTextField referencia;
     private javax.swing.JButton search;
     private javax.swing.JButton search1;
+    private javax.swing.JComboBox<String> size;
     // End of variables declaration//GEN-END:variables
 }
