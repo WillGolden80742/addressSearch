@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package search;
-
+package addresssearch;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Color;
@@ -270,7 +269,7 @@ public class Adress extends javax.swing.JFrame {
         if (selectSizeInit) {
             new Thread(downloadMap).start();
         } else {
-            selectSizeInit=true;
+            selectSizeInit = true;
         }
     }//GEN-LAST:event_sizeActionPerformed
 
@@ -344,16 +343,16 @@ public class Adress extends javax.swing.JFrame {
         }
     };
 
-
     public static void main(String[] args) {
+
         try {
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (UnsupportedLookAndFeelException ex) {
             System.err.println("Failed to initialize LaF");
         }
-        new Adress().setVisible(true);
+        new Adress().setVisible(true); 
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField complemento;
     private javax.swing.JButton jButton1;
