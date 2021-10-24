@@ -100,10 +100,12 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="mapView" min="-2" pref="256" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="logradouro" alignment="3" pref="34" max="32767" attributes="0"/>
-                  <Component id="jLabel2" alignment="3" max="32767" attributes="0"/>
-                  <Component id="size" pref="34" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="logradouro" alignment="3" pref="34" max="32767" attributes="0"/>
+                      <Component id="jLabel2" alignment="3" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="size" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -260,50 +262,10 @@
         <Property name="text" type="java.lang.String" value="&lt;html&gt;   &lt;head&gt;    &lt;/head&gt;   &lt;body styles=&quot;background-image: url(&apos;https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&amp;w=1000&amp;q=80&apos;); background-size: 100%;&quot;&gt;     &lt;p style=&quot;margin-top: 0&quot;&gt;            &lt;/p&gt;   &lt;/body&gt; &lt;/html&gt; "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="size">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="30">
-            <StringItem index="0" value="1x"/>
-            <StringItem index="1" value="2x"/>
-            <StringItem index="2" value="3x"/>
-            <StringItem index="3" value="4x"/>
-            <StringItem index="4" value="5x"/>
-            <StringItem index="5" value="6x"/>
-            <StringItem index="6" value="7x"/>
-            <StringItem index="7" value="8x"/>
-            <StringItem index="8" value="9x"/>
-            <StringItem index="9" value="10x"/>
-            <StringItem index="10" value="11x"/>
-            <StringItem index="11" value="12x"/>
-            <StringItem index="12" value="13x"/>
-            <StringItem index="13" value="14x"/>
-            <StringItem index="14" value="15x"/>
-            <StringItem index="15" value="16x"/>
-            <StringItem index="16" value="17x"/>
-            <StringItem index="17" value="18x"/>
-            <StringItem index="18" value="19x"/>
-            <StringItem index="19" value="20x"/>
-            <StringItem index="20" value="21x"/>
-            <StringItem index="21" value="22x"/>
-            <StringItem index="22" value="23x"/>
-            <StringItem index="23" value="24x"/>
-            <StringItem index="24" value="25x"/>
-            <StringItem index="25" value="26x"/>
-            <StringItem index="26" value="27x"/>
-            <StringItem index="27" value="28x"/>
-            <StringItem index="28" value="29x"/>
-            <StringItem index="29" value="30x"/>
-          </StringArray>
-        </Property>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
+    <Component class="javax.swing.JSpinner" name="size">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sizeActionPerformed"/>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sizeStateChanged"/>
       </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
