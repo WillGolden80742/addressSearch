@@ -320,6 +320,7 @@ public class Adress extends javax.swing.JFrame implements ChangeListener {
             try {
                 mapView.setText(mapHtml);
             } catch (NullPointerException ex) {
+            } catch (RuntimeException ex) {
             }
             size.setEnabled(true);
             // faz o preload da imagem
