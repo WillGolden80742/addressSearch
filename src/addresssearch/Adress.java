@@ -330,7 +330,6 @@ public class Adress extends javax.swing.JFrame implements ChangeListener {
         @Override
         public void run() {
             String urlString = "https://maps.googleapis.com/maps/api/distancematrix/xml?origins=" + enderecoInicial + "&destinations=" + enderecoFinal + "&key=" + apiKey + "&mode=driving&language=pt-BR&sensor=false";
-            System.out.println(urlString);
             try {
 
                 URL urlGoogleDirService = new URL(urlString);
@@ -351,7 +350,6 @@ public class Adress extends javax.swing.JFrame implements ChangeListener {
                 values = new String[2];
                 int i = 0;
                 for (String s : value) {
-                    System.out.println("Valores" + s);
                     if (i == 3) {
                         values[0] = s;
                     }
