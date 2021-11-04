@@ -80,7 +80,7 @@ public class Adress extends javax.swing.JFrame implements ChangeListener {
     }
 
     private void setDefaulMap() {
-        String path = new File("src/Images/cityBackground.png").getAbsoluteFile().toURI().toString();
+        String path = new File("Images/cityBackground.png").getAbsoluteFile().toURI().toString();
         this.mapHtml = mapHtml.replace("#img", path);
         mapView.setText(mapHtml);
 
@@ -301,6 +301,11 @@ public class Adress extends javax.swing.JFrame implements ChangeListener {
             endereco += l + "%20";
         }
         return endereco;
+    }
+
+    private void searchMap() {
+        enderecoFinal = endercoTratado();
+        new Thread(downloadMap).start();
     }
 
     private void search() {
